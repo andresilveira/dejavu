@@ -11,9 +11,11 @@ class AddQuery extends React.Component {
 			touch: false,
 			name: false,
 			type: false,
-			body: false
+			body: false,
 		},
-		name: this.props.editable ? this.props.queryInfo.name : ''
+		name: this.props.editable ? this.props.queryInfo.name : '',
+		"dripEmailSendFrom": "André Herculano",
+		"dripEmailSequence": "StackOverflow A"
 	};
 
 	componentDidUpdate() {
@@ -79,7 +81,9 @@ class AddQuery extends React.Component {
 			name: document.getElementById('setName').value,
 			query: this.editorref.getValue(),
 			createdAt: new Date().getTime(),
-			type: document.getElementById('applyQueryOn').value
+			type: document.getElementById('applyQueryOn').value,
+			dripEmailSendFrom: this.dripEmailSendFromSelect.value,
+			dripEmailSequence: this.dripEmailSequenceSelect.value
 		};
 		validateClass.touch = true;
 		validateClass.name = queryValues.name == '' ? false : true;
@@ -206,6 +210,36 @@ class AddQuery extends React.Component {
 									<span className="help-block">
 										Query name is required.
 									</span>
+								</div>
+							</div>
+							<div className="form-group">
+								<label htmlFor="dripEmailSequence" className="col-sm-3 control-label">Email Template <span className="small-span">(DripEmail)</span></label>
+								<div className="col-sm-9">
+									<select
+										ref={(select) => { this.dripEmailSequenceSelect = select }}
+										className="form-control"
+										id="dripEmailSequence"
+										name="dripEmailSequence"
+										value={this.state.dripEmailSequence}
+										onChange={this.handleChange} >
+										<option value="StackOverflow A">StackOverflow A</option>
+										<option value="AutoDesk B">AutoDesk B</option>
+									</select>
+								</div>
+							</div>
+							<div className="form-group">
+								<label htmlFor="dripEmailSendFrom" className="col-sm-3 control-label">Send From <span className="small-span">(DripEmail)</span></label>
+								<div className="col-sm-9">
+									<select
+										ref={(select) => { this.dripEmailSendFromSelect = select }}
+										className="form-control"
+										id="dripEmailSendFrom"
+										name="dripEmailSendFrom"
+										value={this.state.dripEmailSendFrom}
+										onChange={this.handleChange} >
+										<option value="Steven Evans">Steven Evans</option>
+										<option value="André Herculano">André Herculano</option>
+									</select>
 								</div>
 							</div>
 							{Utils.getTypeMarkup('query', validateClass, selectClass)}
