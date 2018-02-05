@@ -19,25 +19,20 @@ class QueryList extends React.Component {
 	};
 
 	setHistoricList = (list) => {
+		debugger;
 		var list = JSON.stringify(list);
 		storageService.setItem('dejavuQueryList', list);
 	};
 
-	includeQuery = (queryEntry, queryIndex = null) => {
-		let querylist = this.filterDeleteQuery(queryEntry);
-		if (queryIndex) {
-			querylist = [
-				...querylist.slice(0, queryIndex),
-				queryEntry,
-				...querylist.slice(queryIndex + 1)
-			];
+	includeQuery = (queryEntry, index = null) => {
+		let querylist = this.state.querylist;
+		if (index !== null) {
+			querylist = [...querylist.slice(0, index), queryEntry, ...querylist.slice(index + 1)];
 		} else {
-			querylist.push(queryEntry);
+			querylist = [...querylist, queryEntry];
 		}
 		this.setHistoricList(querylist);
-		this.setState({
-			querylist: querylist
-		}, this.applyQuery.call(this, queryEntry));
+		this.setState({ querylist }, this.applyQuery.bind(this, queryEntry));
 	};
 
 	applyQuery = (queryEntry) => {
@@ -97,7 +92,7 @@ class QueryList extends React.Component {
 	};
 
 	renderQueries = () => {
-		return this.state.querylist.map((queryEntry, index) => (
+		return this.state.querylist.map(((queryEntry, index) => (
 				<li key={index} className={"list-item col-xs-12 "+ (this.props.externalQueryApplied && queryEntry.name === this.state.selectedQuery.name ? 'active' : '')}>
 					<div className="theme-element radio">
 						<input
@@ -122,14 +117,13 @@ class QueryList extends React.Component {
 						queryInfo={queryEntry}
 						types={this.props.types}
 						selectClass="applyQueryOn"
-						includeQuery={this.includeQuery}
+						includeQuery={this.includeQuery.bind(this)}
 					/>
 					<span className="pull-right createdAt">
 						{moment(queryEntry.createdAt).format('Do MMM, h:mm a')}
 					</span>
 				</li>
-			);
-		}.bind(this));
+		)).bind(this));
 	};
 
 	state = {
@@ -154,7 +148,8 @@ class QueryList extends React.Component {
 						<AddQuery
 							types={this.props.types}
 							selectClass="applyQueryOn"
-							includeQuery={this.includeQuery} />
+							includeQuery={this.includeQuery.bind(this)}
+							queryInfo={{}} />
 					</li>
 					{this.renderQueries()}
 				</ul>

@@ -11,11 +11,11 @@ class AddQuery extends React.Component {
 			touch: false,
 			name: false,
 			type: false,
-			body: false,
+			body: false
 		},
 		name: this.props.editable ? this.props.queryInfo.name : '',
-		"dripEmailSendFrom": "André Herculano",
-		"dripEmailSequence": "StackOverflow A"
+		dripEmailSendFrom: this.props.queryInfo.dripEmailSendFrom || '',
+		dripEmailSequence: this.props.queryInfo.dripEmailSequence || ''
 	};
 
 	componentDidUpdate() {
@@ -60,9 +60,7 @@ class AddQuery extends React.Component {
 	}
 
 	close = () => {
-		this.setState({
-			error: null
-		});
+		this.setState({ error: null });
 		Utils.closeModal.call(this);
 	};
 
@@ -108,8 +106,8 @@ class AddQuery extends React.Component {
 		testQuery.on('data', function(res) {
 			if (!res.hasOwnProperty('error')) {
 				$('.applyQueryBtn').removeClass('loading').removeAttr('disabled');
-				self.props.includeQuery(queryValues, self.props.queryIndex);
 				self.close();
+				self.props.includeQuery(queryValues, self.props.queryIndex);
 			} else {
 				$('.applyQueryBtn').removeClass('loading').removeAttr('disabled');
 				self.setState({
@@ -117,10 +115,12 @@ class AddQuery extends React.Component {
 				});
 			}
 		}).on('error', function(err) {
+			console.log('ENTER on error');
 			self.setState({
 				error: err
 			});
 			$('.applyQueryBtn').removeClass('loading').removeAttr('disabled');
+			console.log('EXIT on data');
 		});
 	};
 
