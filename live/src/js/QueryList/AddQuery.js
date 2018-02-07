@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
 
+import DripEmailSelect from './DripEmailSelect';
+
 var Utils = require('../helper/utils.js');
 
 class AddQuery extends React.Component {
@@ -11,11 +13,14 @@ class AddQuery extends React.Component {
 			touch: false,
 			name: false,
 			type: false,
-			body: false
+			body: false,
+			'Drip Emails: Send From': true,
+			'Drip Emails: Sequence': true
 		},
+		choices: {},
 		name: this.props.editable ? this.props.queryInfo.name : '',
-		dripEmailSendFrom: this.props.queryInfo.dripEmailSendFrom || '',
-		dripEmailSequence: this.props.queryInfo.dripEmailSequence || ''
+		'Drip Emails: Send From': this.props.queryInfo['Drip Emails: Send From'] || '',
+		'Drip Emails: Sequence': this.props.queryInfo['Drip Emails: Sequence'] || ''
 	};
 
 	componentDidUpdate() {
@@ -54,9 +59,7 @@ class AddQuery extends React.Component {
 
 	handleChange = (e) => {
 		const { name, value } = e.target;
-		this.setState({
-			[name]: value
-		});
+		this.setState({ [name]: value });
 	}
 
 	close = () => {
@@ -80,17 +83,23 @@ class AddQuery extends React.Component {
 			query: this.editorref.getValue(),
 			createdAt: new Date().getTime(),
 			type: document.getElementById('applyQueryOn').value,
-			dripEmailSendFrom: this.dripEmailSendFromSelect.value,
-			dripEmailSequence: this.dripEmailSequenceSelect.value
+			'Drip Emails: Send From': this.state['Drip Emails: Send From'],
+			'Drip Emails: Sequence': this.state['Drip Emails: Sequence']
 		};
 		validateClass.touch = true;
 		validateClass.name = queryValues.name == '' ? false : true;
 		validateClass.body = this.IsJsonString(queryValues.query);
 		validateClass.type = queryValues.type == '' ? false : true;
-		this.setState({
-			validate: validateClass
-		});
-		if (validateClass.name && validateClass.body && validateClass.type) {
+		validateClass['Drip Emails: Send From'] = queryValues['Drip Emails: Send From'] == '' ? false : true;
+		validateClass['Drip Emails: Sequence'] = queryValues['Drip Emails: Sequence'] == '' ? false : true;
+		this.setState({ validate: validateClass });
+		if (
+			validateClass.name &&
+			validateClass.body &&
+			validateClass.type &&
+			validateClass['Drip Emails: Sequence'] &&
+			validateClass['Drip Emails: Sequence']
+		) {
 			queryValues.type = $('#applyQueryOn').val();
 			this.validateQuery(queryValues);
 			// this.props.includeQuery(queryValues);
@@ -212,34 +221,28 @@ class AddQuery extends React.Component {
 									</span>
 								</div>
 							</div>
-							<div className="form-group">
-								<label htmlFor="dripEmailSequence" className="col-sm-3 control-label">Email Template <span className="small-span">(DripEmail)</span></label>
+							<div className={`form-group ${this.state.validate['Drip Emails: Sequence'] ? '' : 'has-error'}`}>
+								<label htmlFor="Drip Emails: Sequence" className="col-sm-3 control-label">Email Template <span className="small-span">(DripEmail)</span></label>
 								<div className="col-sm-9">
-									<select
-										ref={(select) => { this.dripEmailSequenceSelect = select }}
-										className="form-control"
-										id="dripEmailSequence"
-										name="dripEmailSequence"
-										value={this.state.dripEmailSequence}
-										onChange={this.handleChange} >
-										<option value="StackOverflow A">StackOverflow A</option>
-										<option value="AutoDesk B">AutoDesk B</option>
-									</select>
+									<DripEmailSelect
+										field='Drip Emails: Sequence'
+										name='Drip Emails: Sequence'
+										value={this.state['Drip Emails: Sequence']}
+										onChange={this.handleChange}
+										className="form-control" />
+									<span className="help-block">Is required.</span>
 								</div>
 							</div>
-							<div className="form-group">
-								<label htmlFor="dripEmailSendFrom" className="col-sm-3 control-label">Send From <span className="small-span">(DripEmail)</span></label>
+							<div className={`form-group ${this.state.validate['Drip Emails: Send From'] ? '' : 'has-error'}`}>
+								<label htmlFor="Drip Emails: Send From" className="col-sm-3 control-label">Send From <span className="small-span">(DripEmail)</span></label>
 								<div className="col-sm-9">
-									<select
-										ref={(select) => { this.dripEmailSendFromSelect = select }}
-										className="form-control"
-										id="dripEmailSendFrom"
-										name="dripEmailSendFrom"
-										value={this.state.dripEmailSendFrom}
-										onChange={this.handleChange} >
-										<option value="Steven Evans">Steven Evans</option>
-										<option value="André Herculano">André Herculano</option>
-									</select>
+									<DripEmailSelect
+										field='Drip Emails: Send From'
+										name='Drip Emails: Send From'
+										value={this.state['Drip Emails: Send From']}
+										onChange={this.handleChange}
+										className="form-control" />
+									<span className="help-block">Is required.</span>
 								</div>
 							</div>
 							{Utils.getTypeMarkup('query', validateClass, selectClass)}

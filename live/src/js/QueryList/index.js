@@ -19,7 +19,6 @@ class QueryList extends React.Component {
 	};
 
 	setHistoricList = (list) => {
-		debugger;
 		var list = JSON.stringify(list);
 		storageService.setItem('dejavuQueryList', list);
 	};
