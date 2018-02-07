@@ -23,43 +23,37 @@ class QueryList extends React.Component {
 		storageService.setItem('dejavuQueryList', list);
 	};
 
-	includeQuery = (queryObj, queryIndex = null) => {
-		let querylist = this.filterDeleteQuery(queryObj);
-		if (queryIndex) {
-			querylist = [
-				...querylist.slice(0, queryIndex),
-				queryObj,
-				...querylist.slice(queryIndex + 1)
-			];
+	includeQuery = (queryEntry, index = null) => {
+		let querylist = this.state.querylist;
+		if (index !== null) {
+			querylist = [...querylist.slice(0, index), queryEntry, ...querylist.slice(index + 1)];
 		} else {
-			querylist.push(queryObj);
+			querylist = [...querylist, queryEntry];
 		}
 		this.setHistoricList(querylist);
-		this.setState({
-			querylist: querylist
-		}, this.applyQuery.call(this, queryObj));
+		this.setState({ querylist }, this.applyQuery.bind(this, queryEntry));
 	};
 
-	applyQuery = (query) => {
+	applyQuery = (queryEntry) => {
 		if (this.props.externalQueryApplied) {
-			if (this.state.selectedQuery.name !== query.name) {
-				this.justApplyQuery(query);
+			if (this.state.selectedQuery.name !== queryEntry.name) {
+				this.justApplyQuery(queryEntry);
 			}
 		} else {
-			this.justApplyQuery(query);
+			this.justApplyQuery(queryEntry);
 		}
 	};
 
-	justApplyQuery = (query) => {
+	justApplyQuery = (queryEntry) => {
 		this.setState({
-			selectedQuery: query,
+			selectedQuery: queryEntry,
 		});
-		this.props.externalQuery(query);
+		this.props.externalQuery(queryEntry);
 	};
 
-	applyDeleteQuery = (query) => {
+	applyDeleteQuery = (queryEntry) => {
 		this.setState({
-			selectedQuery: query,
+			selectedQuery: queryEntry,
 			showDeleteQuery: true
 		});
 	};
@@ -79,11 +73,8 @@ class QueryList extends React.Component {
 		});
 	};
 
-	filterDeleteQuery = (query) => {
-		var list = this.state.querylist.filter(function(item) {
-			return item.name !== query.name;
-		});
-		return list;
+	filterDeleteQuery = (queryEntry) => {
+		return this.state.querylist.filter((entry) => entry.name !== queryEntry.name);
 	};
 
 	clearQuery = () => {
@@ -100,40 +91,38 @@ class QueryList extends React.Component {
 	};
 
 	renderQueries = () => {
-		return this.state.querylist.map(function(query, index) {
-			return (
-				<li key={index} className={"list-item col-xs-12 "+ (this.props.externalQueryApplied && query.name === this.state.selectedQuery.name ? 'active' : '')}>
+		return this.state.querylist.map(((queryEntry, index) => (
+				<li key={index} className={"list-item col-xs-12 "+ (this.props.externalQueryApplied && queryEntry.name === this.state.selectedQuery.name ? 'active' : '')}>
 					<div className="theme-element radio">
 						<input
 							id={"query-"+index}
 							type="radio"
-							checked={this.isChecked(query.name)}
-							onChange={this.applyQuery.bind(this, query)}
+							checked={this.isChecked(queryEntry.name)}
+							onChange={this.applyQuery.bind(this, queryEntry)}
 							readOnly={false}
 							/>
 						<label htmlFor={"query-"+index}>
 							<span className="col-xs-12 query-name">
-								{query.name}
+								{queryEntry.name}
 							</span>
 						</label>
 					</div>
-					<a className="btn btn-grey delete-query" onClick={this.applyDeleteQuery.bind(this, query)}>
+					<a className="btn btn-grey delete-query" onClick={this.applyDeleteQuery.bind(this, queryEntry)}>
 						<i className="fa fa-times"></i>
 					</a>
 					<AddQuery
 						editable
 						queryIndex={index}
-						queryInfo={query}
+						queryInfo={queryEntry}
 						types={this.props.types}
 						selectClass="applyQueryOn"
-						includeQuery={this.includeQuery}
+						includeQuery={this.includeQuery.bind(this)}
 					/>
 					<span className="pull-right createdAt">
-						{moment(query.createdAt).format('Do MMM, h:mm a')}
+						{moment(queryEntry.createdAt).format('Do MMM, h:mm a')}
 					</span>
 				</li>
-			);
-		}.bind(this));
+		)).bind(this));
 	};
 
 	state = {
@@ -158,7 +147,8 @@ class QueryList extends React.Component {
 						<AddQuery
 							types={this.props.types}
 							selectClass="applyQueryOn"
-							includeQuery={this.includeQuery} />
+							includeQuery={this.includeQuery.bind(this)}
+							queryInfo={{}} />
 					</li>
 					{this.renderQueries()}
 				</ul>
