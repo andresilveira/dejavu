@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/appbaseio/dejavu.git"
+    "url": "git+https://github.com/andresilveira/dejavu.git"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
@@ -75,7 +75,7 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/appbaseio/dejavu/issues"
+    "url": "https://github.com/andresilveira/dejavu/issues"
   },
-  "homepage": "https://github.com/appbaseio/dejavu#readme"
+  "homepage": "https://github.com/andresilveira/dejavu#readme"
 }

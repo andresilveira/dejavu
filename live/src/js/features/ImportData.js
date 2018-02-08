@@ -33,12 +33,12 @@ class ImportData extends React.Component {
 						<Modal.Title>Import Data into Appbase <span className="small-span">from JSON, MongoDB</span></Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<p>Use appbase.io's <a href="https://github.com/appbaseio/transporter" target="_new">transporter <span className="fa fa-external-link"></span></a> fork to import data from
+						<p>Use appbase.io's <a href="https:///transporter" target="_new">transporter <span className="fa fa-external-link"></span></a> fork to import data from
 						MongoDB, any JSON structure, or text file in three simple steps:
 						</p>
 						<ol>
 						  <li>Get the latest release for your system from
-							<a href="https://github.com/appbaseio/transporter/releases/tag/v0.1.2-appbase" target="_new"> here <span className="fa fa-external-link"></span></a>.</li>
+							<a href="https:///transporter/releases/tag/v0.1.2-appbase" target="_new"> here <span className="fa fa-external-link"></span></a>.</li>
 						  <li>Set the source and sink configurations as mentioned
 						  in the file here, and save it in the same folder as config.yml.</li>
 						<li>Run the transporter using ./transporter run --config &lt;config_file&gt; &lt;transform_file&gt;</li>
