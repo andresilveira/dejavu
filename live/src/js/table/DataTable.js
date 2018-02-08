@@ -336,6 +336,7 @@ class DataTable extends React.Component {
 		return (
 			<div className="dejavu-table">
 				<Info
+					selectedQueryEntry={this.props.selectedQueryEntry}
 					infoObj={this.props.infoObj}
 					totalRecord={this.props.totalRecord}
 					filterInfo={this.props.filterInfo}

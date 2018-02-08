@@ -6,7 +6,6 @@ var DataTable = require('./table/DataTable.js');
 var FeatureComponent = require('./features/FeatureComponent.js');
 var Header = require('./Header.js');
 var Sidebar = require('./Sidebar.js');
-var QueryList = require('./QueryList/index.js');
 var PureRenderMixin = require('react-addons-pure-render-mixin');
 var SharedComponents = require('./helper/SharedComponents');
 
@@ -662,14 +661,15 @@ var HomePage = createReactClass({
 		}
 		this.removeSelection();
 	},
-	externalQuery: function(query) {
-		this.setState(help.externalQueryPre(query, this.removeTypes), this.removeFilter);
-		feed.externalQuery(query.query, query.type , (update, fromStream, total) => {
+	externalQuery: function(queryEntry) {
+		this.setState({
+			...help.externalQueryPre(queryEntry, this.removeTypes),
+			queryEntry
+		}, this.removeFilter);
+		feed.externalQuery(queryEntry.query, queryEntry.type , (update, fromStream, total) => {
 			if (!fromStream) {
 				sdata = [];
-				this.setState({
-					externalQueryTotal: total
-				});
+				this.setState({ externalQueryTotal: total });
 				this.resetData(total);
 			}
 			setTimeout(() => {
@@ -931,10 +931,10 @@ var HomePage = createReactClass({
 									connect: this.state.connect
 								}}
 								queryProps={{
-									'externalQuery':this.externalQuery,
-									'externalQueryApplied': this.state.externalQueryApplied,
-									'removeExternalQuery':this.removeExternalQuery,
-									'types': this.state.types
+									externalQuery: this.externalQuery,
+									externalQueryApplied: this.state.externalQueryApplied,
+									removeExternalQuery: this.removeExternalQuery,
+									types: this.state.types
 								}}
 								importer={{
 									appname: this.state.appname,
@@ -944,6 +944,7 @@ var HomePage = createReactClass({
 						</div>
 						<div className="col-xs-12 dataContainer">
 							<DataTable
+								selectedQueryEntry={this.state.queryEntry}
 								_data={this.state.documents}
 								sortInfo={this.state.sortInfo}
 								filterInfo={this.state.filterInfo}
