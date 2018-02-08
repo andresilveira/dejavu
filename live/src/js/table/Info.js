@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
+import SendToCloseIOButton from './SendToCloseIOButton';
+
 import ignoredTypes from '../helper/getIgnoredTypes';
 var FeatureComponent = require('../features/FeatureComponent.js');
 var ColumnDropdown = require('./ColumnDropdown.js');
@@ -227,6 +229,9 @@ class Info extends React.Component {
 						</div>
 					</MenuItem>
 				</DropdownButton>
+				<span className='m-l10'>
+					<SendToCloseIOButton queryEntry={this.props.selectedQueryEntry} />
+				</span>
 				{
 					this.props.hasImages &&
 					<button
