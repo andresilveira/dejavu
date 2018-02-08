@@ -44,18 +44,13 @@ class QueryList extends React.Component {
 		}
 	};
 
-	justApplyQuery = (queryEntry) => {
-		this.setState({
-			selectedQuery: queryEntry,
-		});
-		this.props.externalQuery(queryEntry);
+	justApplyQuery = (selectedQuery) => {
+		this.setState({ selectedQuery });
+		this.props.externalQuery(selectedQuery);
 	};
 
-	applyDeleteQuery = (queryEntry) => {
-		this.setState({
-			selectedQuery: queryEntry,
-			showDeleteQuery: true
-		});
+	applyDeleteQuery = (selectedQuery) => {
+		this.setState({ selectedQuery, showDeleteQuery: true });
 	};
 
 	deleteQueryCb = (val) => {
