@@ -245,7 +245,7 @@ footer {
 
 .mirage_link {
 	position: absolute;
-	left: 55px;
+	left: 16px;
 	border: 1px solid #eee;
 	color: #0087ff;
 }
@@ -350,7 +350,7 @@ footer {
 	overflow: hidden;
 	position: absolute;
 	width: 100%;
-	padding: 64px 0 44px 270px;
+	padding: 64px 0 0 270px;
 }
 
 .dejavuContainer.appbase .dataContainer {
@@ -947,10 +947,6 @@ iframe {
 .github-star {
 	position: absolute;
 	left: 5px;
-}
-
-#subscribeModal .modal-body {
-	padding-bottom: 45px;
 }
 
 .modal .modal-content {

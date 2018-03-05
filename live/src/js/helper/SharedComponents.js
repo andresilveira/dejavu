@@ -14,14 +14,11 @@ export const InitialForm = (props) => (
 			<div className="vertical1">
 				<div className="esContainer">
 					<div className="img-container">
-						<img src="assets/img/Dejavu_Icon.svg" />
+						<img src="assets/img/labrecruit_logo.png" />
 					</div>
 					<div>
-					  <h1>Déjà vu</h1>
-					  <h4 className="dejavu-bottomline">The Missing Web UI for Elasticsearch</h4>
 					  {props.index_create_text}
 					</div>
-					<ShareLink btn={props.shareBtn}> </ShareLink>
 					{props.composeQuery}
 					<div className="splashIn">
 						<div className="form-group m-0 col-xs-4 pd-0 pr-5">
@@ -47,13 +44,6 @@ export const InitialForm = (props) => (
 							<i className={props.pauseClass}></i>
 							{props.esText}
 						</a>
-						{
-							props.splash ? (
-								<a className="btn btn-default m-l10" href="../importer/index.html">
-									Import JSON or CSV files
-								</a>
-							) : null
-						}
 					</div>
 				</div>
 			</div>

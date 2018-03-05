@@ -4,7 +4,6 @@ var React = require('react');
 import { Tabs, Tab } from 'react-bootstrap';
 var TypeTable = require('./TypeTable.js');
 var QueryList= require('./QueryList/index.js');
-var ImporterSidebar = require('./features/ImporterSidebar.js');
 
 class Sidebar extends React.Component {
 	state = {};
@@ -12,15 +11,13 @@ class Sidebar extends React.Component {
 	render() {
 		return (
 			<Tabs defaultActiveKey={1} id="dejavu-sidebar">
-				<Tab 
-					eventKey={1} 
+				<Tab
+					eventKey={1}
 					title="Types">
 					<TypeTable {...this.props.typeProps} />
-					<ImporterSidebar clone={true} {...this.props.importer} />
-					<ImporterSidebar {...this.props.importer} />
 				</Tab>
-				<Tab 
-					eventKey={2} 
+				<Tab
+					eventKey={2}
 					title="Queries">
 					<QueryList {...this.props.queryProps} />
 				</Tab>
