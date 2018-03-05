@@ -9,8 +9,8 @@ module.exports = {
 		importer: [path.join(__dirname, 'importer/js/app.js')]
 	},
 	output: {
-		path: path.join(__dirname, './bundle'),
-		publicPath: '/bundle/',
+		path: path.join(__dirname, './live/bundle'),
+		publicPath: '/live/bundle/',
 		filename: '[name].js'
 	},
 	devtool: 'inline-sourcemap',
