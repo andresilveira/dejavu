@@ -850,7 +850,6 @@ var HomePage = createReactClass({
 		var esText = !this.state.splash ? (this.state.connect ? 'Disconnect':'Connect'): 'Start Browsing';
 		var esBtn = this.state.connect ? 'btn-danger ': '';
 		esBtn += 'btn btn-default submit-btn';
-		var shareBtn = this.state.connect ? 'share-btn': 'hide';
 		var url = this.state.url;
 		var opts = {};
 		var playClass = 'ib fa fa-play';
@@ -874,7 +873,6 @@ var HomePage = createReactClass({
 				<SharedComponents.InitialForm
 					EsForm={EsForm}
 					index_create_text={index_create_text}
-					shareBtn={shareBtn}
 					appSelect={{
 						connect: self.state.connect,
 						splash: self.state.splash,
@@ -900,11 +898,7 @@ var HomePage = createReactClass({
 			);
 			return form;
 		}
-		var footer;
 		queryParams = getQueryParameters();
-		if(!((queryParams && queryParams.hasOwnProperty('hf')) || (queryParams && queryParams.hasOwnProperty('f')))) {
-			footer = (<SharedComponents.FooterCombine githubStar={githubStar} />);
-		}
 		if(!((queryParams && queryParams.hasOwnProperty('hf')) || (queryParams && queryParams.hasOwnProperty('h')))) {
 			var dejavuForm = initialForm.call(this);
 		}
@@ -980,7 +974,6 @@ var HomePage = createReactClass({
 								connect={this.state.connect}
 							/>
 						</div>
-						{footer}
 						{
 							this.state.errorMessage.length ?
 								<FeatureComponent.ErrorModal
