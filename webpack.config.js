@@ -5,8 +5,7 @@ const debug = process.env.NODE_ENV !== "production";
 
 module.exports = {
 	entry: {
-		live: [path.join(__dirname, 'live/src/js/app.js')],
-		importer: [path.join(__dirname, 'importer/js/app.js')]
+		live: [path.join(__dirname, 'live/src/js/app.js')]
 	},
 	output: {
 		path: path.join(__dirname, './live/bundle'),
