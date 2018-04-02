@@ -13,7 +13,7 @@ const getOptionsForDripEmail = fieldName =>
 	);
 
 const sendToCloseIO = queryEntry =>
-	requestJson('/closeio/dripemail', {
+	requestJson('/closeio/drip_email', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(queryEntry)

@@ -14,13 +14,12 @@ class AddQuery extends React.Component {
 			name: false,
 			type: false,
 			body: false,
-			'Drip Emails: Send From': true,
-			'Drip Emails: Sequence': true
+			sendFrom: true,
+			template: true
 		},
-		choices: {},
 		name: this.props.editable ? this.props.queryInfo.name : '',
-		'Drip Emails: Send From': this.props.queryInfo['Drip Emails: Send From'] || '',
-		'Drip Emails: Sequence': this.props.queryInfo['Drip Emails: Sequence'] || ''
+		sendFrom: this.props.queryInfo.sendFrom || '',
+		template: this.props.queryInfo.template || ''
 	};
 
 	componentDidUpdate() {
@@ -77,28 +76,28 @@ class AddQuery extends React.Component {
 	};
 
 	validateInput = () => {
-		var validateClass = this.state.validate;
-		var queryValues = {
-			name: document.getElementById('setName').value,
+		const validateClass = this.state.validate;
+		const queryValues = {
+			name: this.state.name,
 			query: this.editorref.getValue(),
 			createdAt: new Date().getTime(),
 			type: document.getElementById('applyQueryOn').value,
-			'Drip Emails: Send From': this.state['Drip Emails: Send From'],
-			'Drip Emails: Sequence': this.state['Drip Emails: Sequence']
+			sendFrom: this.state.sendFrom,
+			template: this.state.template
 		};
 		validateClass.touch = true;
-		validateClass.name = queryValues.name == '' ? false : true;
+		validateClass.name = queryValues.name !== '';
 		validateClass.body = this.IsJsonString(queryValues.query);
-		validateClass.type = queryValues.type == '' ? false : true;
-		validateClass['Drip Emails: Send From'] = queryValues['Drip Emails: Send From'] == '' ? false : true;
-		validateClass['Drip Emails: Sequence'] = queryValues['Drip Emails: Sequence'] == '' ? false : true;
+		validateClass.type = queryValues.type !== '';
+		validateClass.sendFrom = queryValues.sendFrom !== '';
+		validateClass.template = queryValues.template !== '';
 		this.setState({ validate: validateClass });
 		if (
 			validateClass.name &&
 			validateClass.body &&
 			validateClass.type &&
-			validateClass['Drip Emails: Sequence'] &&
-			validateClass['Drip Emails: Sequence']
+			validateClass.template &&
+			validateClass.sendFrom
 		) {
 			queryValues.type = $('#applyQueryOn').val();
 			this.validateQuery(queryValues);
@@ -123,13 +122,9 @@ class AddQuery extends React.Component {
 					error: res.error
 				});
 			}
-		}).on('error', function(err) {
-			console.log('ENTER on error');
-			self.setState({
-				error: err
-			});
+		}).on('error', function(error) {
+			self.setState({ error });
 			$('.applyQueryBtn').removeClass('loading').removeAttr('disabled');
-			console.log('EXIT on data');
 		});
 	};
 
@@ -170,26 +165,19 @@ class AddQuery extends React.Component {
 	};
 
 	render() {
-		var typeList = '';
-		var btnText = this.props.text ? this.props.text : '';
-		if (typeof this.props.types != 'undefined') {
-			typeList = this.props.types.map(function(type) {
-				return <option value={type}>{type}</option>
-			});
-		}
+		let validateClass = {};
 		if (this.state.validate.touch) {
-			var validateClass = {};
 			validateClass.body = this.state.validate.body ? 'form-group' : 'form-group has-error';
 			validateClass.name = this.state.validate.name ? 'form-group' : 'form-group has-error';
 			validateClass.type = this.state.validate.type ? 'form-group' : 'form-group has-error';
 		} else {
-			var validateClass = {
+			validateClass = {
 				name: 'form-group',
 				body: 'form-group',
 				type: 'form-group'
 			};
 		}
-		var selectClass = this.props.selectClass + ' tags-select form-control';
+		const selectClass = `${this.props.selectClass} tags-select form-control`;
 
 		return (
 			<div className={`add-record-container ${this.props.editable ? 'edit-query-container col-xs-5' : 'col-xs-12'} pd-0`}>
@@ -221,27 +209,28 @@ class AddQuery extends React.Component {
 									</span>
 								</div>
 							</div>
-							<div className={`form-group ${this.state.validate['Drip Emails: Sequence'] ? '' : 'has-error'}`}>
-								<label htmlFor="Drip Emails: Sequence" className="col-sm-3 control-label">Email Template <span className="small-span">(DripEmail)</span></label>
+							<div className={`form-group ${this.state.validate.template ? '' : 'has-error'}`}>
+								<label htmlFor="template" className="col-sm-3 control-label">Email Template <span className="small-span">(DripEmail)</span></label>
 								<div className="col-sm-9">
 									<DripEmailSelect
-										field='Drip Emails: Sequence'
-										name='Drip Emails: Sequence'
-										value={this.state['Drip Emails: Sequence']}
+										field="Drip Emails: Sequence"
+										name="template"
+										value={this.state.template}
 										onChange={this.handleChange}
 										className="form-control" />
 									<span className="help-block">Is required.</span>
 								</div>
 							</div>
-							<div className={`form-group ${this.state.validate['Drip Emails: Send From'] ? '' : 'has-error'}`}>
-								<label htmlFor="Drip Emails: Send From" className="col-sm-3 control-label">Send From <span className="small-span">(DripEmail)</span></label>
+							<div className={`form-group ${this.state.validate.sendFrom ? '' : 'has-error'}`}>
+								<label htmlFor="sendFrom" className="col-sm-3 control-label">Send From <span className="small-span">(DripEmail)</span></label>
 								<div className="col-sm-9">
 									<DripEmailSelect
-										field='Drip Emails: Send From'
-										name='Drip Emails: Send From'
-										value={this.state['Drip Emails: Send From']}
+										field="Drip Emails: Send From"
+										name="sendFrom"
+										value={this.state.sendFrom}
 										onChange={this.handleChange}
-										className="form-control" />
+										className="form-control"
+									/>
 									<span className="help-block">Is required.</span>
 								</div>
 							</div>
@@ -258,7 +247,7 @@ class AddQuery extends React.Component {
 							{this.isErrorExists()}
 						</div>
 						<Button key="applyQueryBtn" className="applyQueryBtn" bsStyle="success" onClick={this.validateInput}>
-							<i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+							<i className="fa fa-spinner fa-spin fa-3x fa-fw" />
 							{
 								this.props.editable ?
 									'Update' :
